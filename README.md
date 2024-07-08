@@ -29,22 +29,24 @@ void processCsv(const char[], const char[], const char[]);
  */
 void processCsvFile(const char[], const char[], const char[]);
 ```
+
 processCsv
+
 - csv: String com os dados do CSV, onde cada linha representa um registro e as colunas são separadas por vírgulas.
-    - Exemplo: `"header1,header2,header3\n1,2,3\n4,5,6"`
+  - Exemplo: `"header1,header2,header3\n1,2,3\n4,5,6"`
 - selectedColumns: Uma string onde os nomes das colunas a serem selecionadas são separados por vírgulas.
-    - Exemplo: `"header1,header3"`
+  - Exemplo: `"header1,header3"`
 - rowFilterDefinitions: Uma string onde cada filtro é definido em uma nova linha, no formato `header(comparador)valor`.
-    - Exemplo: `"header1>1\nheader2=2\nheader3<6"`
+  - Exemplo: `"header1>1\nheader2=2\nheader3<6"`
 
 processCsvFile
-- csvFilePath: String com o caminho do arquivo CSV.
-    - Exemplo: `"path/to/csv_file.csv"`
-- selectedColumns: Uma string onde os nomes das colunas a serem selecionadas são separados por vírgulas.
-    - Exemplo: `"header1,header3"`
-- rowFilterDefinitions: Uma string onde cada filtro é definido em uma nova linha, no formato `header(comparador)valor`.
-    - Exemplo: `"header1>1\nheader2=2\nheader3<6"`
 
+- csvFilePath: String com o caminho do arquivo CSV.
+  - Exemplo: `"path/to/csv_file.csv"`
+- selectedColumns: Uma string onde os nomes das colunas a serem selecionadas são separados por vírgulas.
+  - Exemplo: `"header1,header3"`
+- rowFilterDefinitions: Uma string onde cada filtro é definido em uma nova linha, no formato `header(comparador)valor`.
+  - Exemplo: `"header1>1\nheader2=2\nheader3<6"`
 
 Exemplo:
 
@@ -66,7 +68,6 @@ processCsvFile(csv_file, "header1,header3,header4", "header1>1\nheader3<10");
 ```
 
 ## Funcionalidades Obrigatórias e Requisitos
-
 
 O candidato deve focar nos requisitos obrigatórios, pois o descumprimento de qualquer um deles acarreta na desclassificação do processo seletivo.
 
@@ -95,9 +96,9 @@ header1,header2,header3
 
 - **As strings de seleção de colunas e filtro sempre terão a mesma ordem que aparecem no CSV**
 
-    Exemplo:
-    - `"header1,header3"` ou `"header1=4\nheader3>3"` &rarr; OK
-    - `"header3,header1"` ou `"header3>3\nheader1=4"` &rarr; NÃO OK
+  Exemplo:
+  - `"header1,header3"` ou `"header1=4\nheader3>3"` &rarr; OK
+  - `"header3,header1"` ou `"header3>3\nheader1=4"` &rarr; NÃO OK
 
 - **Vírgulas sempre delimitam uma coluna, aspas não têm nenhuma interpretação especial**
 
@@ -119,9 +120,9 @@ header1,header2,header3
 
 - **Nunca serão fornecidos filtros inválidos ou colunas inexistentes**
 
-    Exemplo:
-    - Coluna inexistente: `"header4"`
-    - Filtro inválido: `"header1#2"`
+  Exemplo:
+  - Coluna inexistente: `"header4"`
+  - Filtro inválido: `"header1#2"`
 
 - **Nunca será fornecido mais de 1 filtro por coluna**
 
@@ -139,12 +140,12 @@ header1,header2,header3
 
 - **Não é permitido o uso de bibliotecas externas para converter o CSV em estruturas de dados intermediárias (libs de lexers e tokenizers podem ser utilizadas)**
 
-
 ## Funcionalidades Bônus
 
 Se o candidato terminar todos os pontos obrigatórios e ainda dispor de tempo livre, a seguir estão algumas funcionalidades bônus que contarão como critério de desempate.
 
 Para todos os exemplos abaixo, considere sempre o seguinte CSV:
+
 ```csv
 header1,header2,header3
 1,2,3
@@ -185,7 +186,6 @@ header1,header2,header3
 
     Se a string de colunas selecionadas inclui `"header4"` e o CSV não tem um header header4, ou se os filtros incluem `"header5=10"` e o CSV não tem um header header5, sua implementação deve tratar esses casos adequadamente, escrevendo no stderr com a mensagem `"Header 'header4' not found in CSV file/string"` ou `"Header 'header5' not found in CSV file/string"`, respectivamente, encerrando a execução.
 
-
 5) **Tratamento de erro para filtros inválidos**
 
     Se for fornecido um filtro inexistente ou inválido, como `header1#2`, sua implementação deve tratar esses casos escrevendo no stderr com a mensagem `"Invalid filter: 'header1#2'"`.
@@ -208,4 +208,5 @@ header1,header2,header3
     header1,header2,header3
     7,8,9
     ```
+
 ---
