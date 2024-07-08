@@ -1,3 +1,6 @@
+#ifndef LIBCSV_H
+#define LIBCSV_H
+
 /**
  * Process the CSV data by applying filters and selecting columns.
  *
@@ -19,3 +22,5 @@ void processCsv(const char[], const char[], const char[]);
  * @return void
  */
 void processCsvFile(const char[], const char[], const char[]);
+
+#endif
