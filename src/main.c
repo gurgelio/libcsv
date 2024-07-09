@@ -1,14 +1,5 @@
-#include "include/main.h"
 #include "include/lexer.h"
 #include <stdio.h>
-
-void processCsv(const char csv[], const char selectedRows[], const char rowFilterDefinitions[])
-{
-}
-
-void processCsvFile(const char csvFilePath[], const char selectedRows[], const char rowFilterDefinitions[])
-{
-}
 
 int main(int argc, char *argv[])
 {

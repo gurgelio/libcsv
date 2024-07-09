@@ -9,7 +9,7 @@
 typedef struct LEXER_STRUCT
 {
   char currentChar, *content;
-  int currentIndex;
+  unsigned int currentIndex;
 } Lexer;
 
 Lexer *newLexer(char *content);
