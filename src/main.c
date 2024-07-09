@@ -1,7 +1,7 @@
-#include "include/lexer.h"
+#include "include/main.h"
 #include <stdio.h>
 
-int main(int argc, char *argv[])
+int main()
 {
   Lexer *lexer = newLexer(
       "col1,col2,col3\n"
@@ -15,4 +15,6 @@ int main(int argc, char *argv[])
     printf("TOKEN(%d, '%s')\n", token->type, token->value);
     token = nextToken(lexer);
   }
+
+  return 0;
 }

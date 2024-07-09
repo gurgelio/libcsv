@@ -1,5 +1,4 @@
 #include "include/libcsv.h"
-#include "include/lexer.h"
 #include <stdio.h>
 
 void processCsv(const char csv[], const char selectedRows[], const char rowFilterDefinitions[])

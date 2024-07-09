@@ -1,6 +1,8 @@
 #ifndef LIBCSV_H
 #define LIBCSV_H
 
+#include "lexer.h"
+
 /**
  * Process the CSV data by applying filters and selecting columns.
  *

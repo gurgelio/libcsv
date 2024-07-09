@@ -1,6 +1,6 @@
-#include "include/lexer.h"
+#include <string.h>
 #include <stdlib.h>
-#include <stdio.h>
+#include "include/lexer.h"
 
 Lexer *newLexer(char *content)
 {
