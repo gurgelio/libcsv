@@ -3,56 +3,56 @@
 #include <stdio.h>
 #include "include/lexer.h"
 
-Lexer newLexer(ConstStr content)
+Lexer lexerNew(ConstStr content)
 {
-  Lexer l = malloc(sizeof(struct LEXER_STRUCT));
-  l->content = content;
-  l->currentChar = content[0];
-  l->currentIndex = 0;
-  return l;
+  return (Lexer){
+      .content = content,
+      .currentChar = content[0],
+      .currentIndex = 0};
 }
 
-Token *getTokens(Lexer lexer, unsigned int *numberOfTokens)
+Token *lexerGetTokens(Lexer *lexer, unsigned int *numberOfTokens)
 {
   *numberOfTokens = 0;
-  Token *tokens = calloc(1, sizeof(struct TOKEN_STRUCT)), token = nextToken(lexer);
-  while (token->type != TOKEN_EOF)
+  Token *tokens = calloc(1, sizeof(Token)), token = lexerNextToken(lexer);
+  while (token.type != TOKEN_EOF)
   {
-    tokens = realloc(tokens, ++(*numberOfTokens) * sizeof(struct TOKEN_STRUCT));
+    *numberOfTokens += 1;
+    tokens = realloc(tokens, (*numberOfTokens) * sizeof(Token));
     tokens[*numberOfTokens - 1] = token;
-    token = nextToken(lexer);
+    token = lexerNextToken(lexer);
   }
   return tokens;
 }
 
-Token nextToken(Lexer lexer)
+Token lexerNextToken(Lexer *lexer)
 {
   switch (lexer->currentChar)
   {
   case '=':
     advance(lexer);
-    return newToken(TOKEN_EQUALS, "=");
+    return tokenNew(TOKEN_EQUALS, "=");
   case '<':
     advance(lexer);
-    return newToken(TOKEN_LESS_THAN, "<");
+    return tokenNew(TOKEN_LESS_THAN, "<");
   case '>':
     advance(lexer);
-    return newToken(TOKEN_GREATER_THAN, ">");
+    return tokenNew(TOKEN_GREATER_THAN, ">");
   case ',':
     advance(lexer);
-    return newToken(TOKEN_COMMA, ",");
+    return tokenNew(TOKEN_COMMA, ",");
   case '\n':
     advance(lexer);
-    return newToken(TOKEN_NEWLINE, "\n");
+    return tokenNew(TOKEN_NEWLINE, "\n");
   case 0:
     advance(lexer);
-    return newToken(TOKEN_EOF, "");
+    return tokenNew(TOKEN_EOF, "");
   default:
     return collectValue(lexer);
   }
 }
 
-Token collectValue(Lexer lexer)
+Token collectValue(Lexer *lexer)
 {
   Str value = calloc(1, sizeof(char));
   value[0] = '\0';
@@ -65,12 +65,12 @@ Token collectValue(Lexer lexer)
     advance(lexer);
   }
 
-  return newToken(TOKEN_VALUE, value);
+  return tokenNew(TOKEN_VALUE, value);
 }
 
-void advance(Lexer lexer)
+void advance(Lexer *lexer)
 {
-  lexer->currentIndex++;
+  lexer->currentIndex += 1;
   if (hasReachedEof(lexer))
   {
     lexer->currentChar = '\0';
@@ -80,7 +80,7 @@ void advance(Lexer lexer)
   lexer->currentChar = lexer->content[lexer->currentIndex];
 }
 
-Str currentCharAsString(Lexer lexer)
+Str currentCharAsString(Lexer *lexer)
 {
   Str str = calloc(2, sizeof(char));
   str[0] = lexer->currentChar;
@@ -94,7 +94,7 @@ bool isSeparator(char c)
   return c == ',' || c == '<' || c == '>' || c == '=' || c == '!' || c == '\n' || c == '\0';
 }
 
-bool hasReachedEof(Lexer lexer)
+bool hasReachedEof(Lexer *lexer)
 {
   return lexer->currentIndex >= strlen(lexer->content);
 }

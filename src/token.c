@@ -3,15 +3,14 @@
 #include <stdio.h>
 #include <math.h>
 
-Token newToken(TokenType type, Str value)
+Token tokenNew(TokenType type, Str value)
 {
-  Token t = malloc(sizeof(struct TOKEN_STRUCT));
-  t->type = type;
-  t->value = value;
-  return t;
+  return (Token){
+      .type = type,
+      .value = value};
 }
 
-Str tokenToString(Token token)
+Str tokenToString(Token *token)
 {
   char *s = malloc(100 * sizeof(char));
 
@@ -25,8 +24,6 @@ Str tokenTypeToString(TokenType type)
   {
   case TOKEN_COMMA:
     return ",";
-  case TOKEN_EOF:
-    return "EOF";
   case TOKEN_EQUALS:
     return "=";
   case TOKEN_GREATER_THAN:

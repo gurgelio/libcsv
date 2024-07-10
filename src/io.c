@@ -1,7 +1,6 @@
-#include "include/io.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include "include/str.h"
+#include "include/io.h"
 
 Str getFileContents(ConstStr filepath)
 {

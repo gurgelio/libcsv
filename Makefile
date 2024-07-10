@@ -1,6 +1,6 @@
 shared_object = libcsv.so
 executable = libcsv.out
-sources = $(wildcard src/*.c) $(wildcard src/*/*.c)
+sources = $(wildcard src/*.c)
 objects = $(sources:.c=.o)
 flags = -lm -g -fPIC -Wall -Wextra -ggdb3
 

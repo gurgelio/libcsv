@@ -1,6 +1,7 @@
 #ifndef IO_H
 #define IO_H
+#include "str.h"
 
-char *getFileContents(const char *filepath);
+Str getFileContents(ConstStr filepath);
 
 #endif
