@@ -6,21 +6,24 @@
 
 typedef struct LEXER_STRUCT
 {
-  char currentChar, *content;
+  char currentChar;
+  ConstStr content;
   unsigned int currentIndex;
-} Lexer;
+} *Lexer;
 
-Lexer *newLexer(char *content);
+Lexer newLexer(ConstStr content);
 
-Token *nextToken(Lexer *lexer);
+Token *getTokens(Lexer lexer, unsigned int *numberOfTokens);
 
-Token *collectValue(Lexer *lexer);
+Token nextToken(Lexer lexer);
 
-void advance(Lexer *lexer);
+Token collectValue(Lexer lexer);
 
-char *currentCharAsString(Lexer *lexer);
+void advance(Lexer lexer);
 
-bool hasReachedEof(Lexer *lexer);
+Str currentCharAsString(Lexer lexer);
+
+bool hasReachedEof(Lexer lexer);
 
 bool isSeparator(char c);
 

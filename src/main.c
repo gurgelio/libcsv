@@ -3,12 +3,12 @@
 
 int main()
 {
-  Lexer *lexer = newLexer(
+  Lexer lexer = newLexer(
       "col1,col2,col3\n"
       "1,2,3\n"
       "4,5,6\n"
       "7,8,9");
-  Token *token = nextToken(lexer);
+  Token token = nextToken(lexer);
 
   while (token->type != TOKEN_EOF)
   {

@@ -1,17 +1,31 @@
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "include/lexer.h"
 
-Lexer *newLexer(char *content)
+Lexer newLexer(ConstStr content)
 {
-  Lexer *l = malloc(sizeof(struct LEXER_STRUCT));
+  Lexer l = malloc(sizeof(struct LEXER_STRUCT));
   l->content = content;
   l->currentChar = content[0];
   l->currentIndex = 0;
   return l;
 }
 
-Token *nextToken(Lexer *lexer)
+Token *getTokens(Lexer lexer, unsigned int *numberOfTokens)
+{
+  *numberOfTokens = 0;
+  Token *tokens = calloc(1, sizeof(struct TOKEN_STRUCT)), token = nextToken(lexer);
+  while (token->type != TOKEN_EOF)
+  {
+    tokens = realloc(tokens, ++(*numberOfTokens) * sizeof(struct TOKEN_STRUCT));
+    tokens[*numberOfTokens - 1] = token;
+    token = nextToken(lexer);
+  }
+  return tokens;
+}
+
+Token nextToken(Lexer lexer)
 {
   switch (lexer->currentChar)
   {
@@ -38,15 +52,15 @@ Token *nextToken(Lexer *lexer)
   }
 }
 
-Token *collectValue(Lexer *lexer)
+Token collectValue(Lexer lexer)
 {
-  char *value = calloc(1, sizeof(char));
+  Str value = calloc(1, sizeof(char));
   value[0] = '\0';
 
   while (!isSeparator(lexer->currentChar))
   {
-    char *s = currentCharAsString(lexer);
-    value = realloc(value, (strlen(value) + strlen(s) + 1) * sizeof(char));
+    Str s = currentCharAsString(lexer);
+    value = realloc(value, (strlen(value) + strlen(s)) * sizeof(char));
     strcat(value, s);
     advance(lexer);
   }
@@ -54,7 +68,7 @@ Token *collectValue(Lexer *lexer)
   return newToken(TOKEN_VALUE, value);
 }
 
-void advance(Lexer *lexer)
+void advance(Lexer lexer)
 {
   lexer->currentIndex++;
   if (hasReachedEof(lexer))
@@ -66,9 +80,9 @@ void advance(Lexer *lexer)
   lexer->currentChar = lexer->content[lexer->currentIndex];
 }
 
-char *currentCharAsString(Lexer *lexer)
+Str currentCharAsString(Lexer lexer)
 {
-  char *str = calloc(2, sizeof(char));
+  Str str = calloc(2, sizeof(char));
   str[0] = lexer->currentChar;
   str[1] = '\0';
 
@@ -80,7 +94,7 @@ bool isSeparator(char c)
   return c == ',' || c == '<' || c == '>' || c == '=' || c == '!' || c == '\n' || c == '\0';
 }
 
-bool hasReachedEof(Lexer *lexer)
+bool hasReachedEof(Lexer lexer)
 {
   return lexer->currentIndex >= strlen(lexer->content);
 }
