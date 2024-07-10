@@ -1,15 +1,17 @@
+shared_object = libcsv.so
+executable = libcsv.out
 sources = $(wildcard src/*.c) $(wildcard src/*/*.c)
 objects = $(sources:.c=.o)
-flags = -g -fPIC -Wall -Wextra -ggdb3
+flags = -lm -g -fPIC -Wall -Wextra -ggdb3
 
-libcsv.so: $(objects)
+$(shared_object): $(objects)
 	gcc $(flags) -shared $^ -o $@
 
 %.o: %.c include/%.h
 	gcc -c $(flags) $< -o $@
 
 test: $(objects)
-	gcc $(objects) $(flags) -o libcsv.out && ./libcsv.out
+	gcc $(flags) $^ -o $(executable) && ./$(executable)
 
 clean:
-	rm libcsv.{so,out} src/{**/,}*.o
+	rm -f $(executable) $(shared_object) $(objects)
