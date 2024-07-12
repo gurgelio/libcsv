@@ -1,8 +1,6 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 
-#include "str.h"
-
 typedef enum TOKEN_TYPE_ENUM
 {
   TOKEN_EOF,
@@ -16,14 +14,14 @@ typedef enum TOKEN_TYPE_ENUM
 
 typedef struct
 {
-  Str value;
+  char *value;
   TokenType type;
 } Token;
 
-Token tokenNew(TokenType type, Str value);
+Token tokenNew(TokenType type, char *value);
 
-Str tokenToString(Token *token);
+char *tokenToString(Token *token);
 
-Str tokenTypeToString(TokenType type);
+char *tokenTypeToString(TokenType type);
 
 #endif

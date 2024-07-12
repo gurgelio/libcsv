@@ -3,18 +3,18 @@
 #include <stdlib.h>
 #include <string.h>
 
-CsvParser csvParserNew(Token *tokens, unsigned int numberOfTokens)
+CsvParser csvParserNew(Array tokens)
 {
   return (CsvParser){
-      .numberOfTokens = numberOfTokens,
       .tokens = tokens,
       .currentIndex = 0,
-      .currentToken = &tokens[0]};
+      .currentToken = arrayAt(&tokens, 0)};
 }
 
 Csv parseCsv(CsvParser *parser)
 {
   Csv csv = csvNew();
+
   csv.headers = parseRow(parser);
 
   Array row;
@@ -30,18 +30,15 @@ Csv parseCsv(CsvParser *parser)
       exit(1);
     }
 
-    csvAppendRow(&csv, &row);
+    csvAppendRow(&csv, row);
   }
 
-  fprintf(stderr, "CHECKPOINT @ %s:%d", __FILE__, __LINE__);
   return csv;
 }
 
 Array parseRow(CsvParser *parser)
 {
-  Array row = (Array){
-      .items = calloc(1, sizeof(Str)),
-      .size = 0};
+  Array row = arrayNew(sizeof(char *));
   while (parser->currentToken != NULL && parser->currentToken->type != TOKEN_NEWLINE)
   {
     // TODO: talvez adicionar casos para cuidar de caracteres especiais como header
@@ -60,7 +57,7 @@ void eat(CsvParser *parser, TokenType type)
 {
   if (!eatIf(parser, type))
   {
-    fprintf(stderr, "Unexpected Token: expected %s, got %s", tokenTypeToString(type), tokenToString(parser->currentToken));
+    fprintf(stderr, "Unexpected Token: expected %s, got %s\n", tokenTypeToString(type), tokenToString(parser->currentToken));
     exit(1);
   }
 }
@@ -71,9 +68,9 @@ bool eatIf(CsvParser *parser, TokenType type)
     return false;
 
   parser->currentIndex++;
-  if (parser->currentIndex < parser->numberOfTokens)
+  if (parser->currentIndex < parser->tokens.size)
   {
-    parser->currentToken = &parser->tokens[parser->currentIndex];
+    parser->currentToken = arrayAt(&parser->tokens, parser->currentIndex);
   }
   else
   {

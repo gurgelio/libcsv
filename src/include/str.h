@@ -3,6 +3,4 @@
 
 typedef char *Str;
 
-typedef const char *ConstStr;
-
 #endif

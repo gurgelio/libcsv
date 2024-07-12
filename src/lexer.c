@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "include/lexer.h"
 
-Lexer lexerNew(ConstStr content)
+Lexer lexerNew(const char *content)
 {
   return (Lexer){
       .content = content,
@@ -11,15 +11,13 @@ Lexer lexerNew(ConstStr content)
       .currentIndex = 0};
 }
 
-Token *lexerGetTokens(Lexer *lexer, unsigned int *numberOfTokens)
+Array lexerGetTokens(Lexer *lexer)
 {
-  *numberOfTokens = 0;
-  Token *tokens = calloc(1, sizeof(Token)), token = lexerNextToken(lexer);
+  Array tokens = arrayNew(sizeof(Token));
+  Token token = lexerNextToken(lexer);
   while (token.type != TOKEN_EOF)
   {
-    *numberOfTokens += 1;
-    tokens = realloc(tokens, (*numberOfTokens) * sizeof(Token));
-    tokens[*numberOfTokens - 1] = token;
+    arrayAppend(&tokens, &token);
     token = lexerNextToken(lexer);
   }
   return tokens;
@@ -54,13 +52,17 @@ Token lexerNextToken(Lexer *lexer)
 
 Token collectValue(Lexer *lexer)
 {
-  Str value = calloc(1, sizeof(char));
+  char *value = calloc(1, sizeof(char));
+  if (value == NULL)
+    fprintf(stderr, "failed to alloc\n");
   value[0] = '\0';
 
   while (!isSeparator(lexer->currentChar))
   {
-    Str s = currentCharAsString(lexer);
+    char *s = currentCharAsString(lexer);
     value = realloc(value, (strlen(value) + strlen(s)) * sizeof(char));
+    if (value == NULL)
+      fprintf(stderr, "failed to alloc\n");
     strcat(value, s);
     advance(lexer);
   }
@@ -80,9 +82,11 @@ void advance(Lexer *lexer)
   lexer->currentChar = lexer->content[lexer->currentIndex];
 }
 
-Str currentCharAsString(Lexer *lexer)
+char *currentCharAsString(Lexer *lexer)
 {
-  Str str = calloc(2, sizeof(char));
+  char *str = calloc(2, sizeof(char));
+  if (str == NULL)
+    fprintf(stderr, "failed to alloc\n");
   str[0] = lexer->currentChar;
   str[1] = '\0';
 

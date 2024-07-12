@@ -3,22 +3,24 @@
 #include <stdio.h>
 #include <math.h>
 
-Token tokenNew(TokenType type, Str value)
+Token tokenNew(TokenType type, char *value)
 {
   return (Token){
       .type = type,
       .value = value};
 }
 
-Str tokenToString(Token *token)
+char *tokenToString(Token *token)
 {
   char *s = malloc(100 * sizeof(char));
+  if (s == NULL)
+    fprintf(stderr, "failed to alloc\n");
 
   sprintf(s, "Token(%s, '%s')", tokenTypeToString(token->type), token->value);
   return s;
 }
 
-Str tokenTypeToString(TokenType type)
+char *tokenTypeToString(TokenType type)
 {
   switch (type)
   {
@@ -37,8 +39,9 @@ Str tokenTypeToString(TokenType type)
   case TOKEN_VALUE:
     return "VALUE";
   default:
-    char *s = malloc(sizeof(char) * (int)log10(type));
-
+    char *s = malloc(100 * sizeof(char));
+    if (s == NULL)
+      fprintf(stderr, "failed to alloc\n");
     sprintf(s, "%d", type);
     return s;
   }

@@ -12,7 +12,7 @@
  *
  * @return void
  */
-void processCsv(ConstStr, ConstStr, ConstStr);
+void processCsv(const char *, const char *, const char *);
 
 /**
  * Process the CSV data by applying filters and selecting columns.
@@ -23,6 +23,6 @@ void processCsv(ConstStr, ConstStr, ConstStr);
  *
  * @return void
  */
-void processCsvFile(ConstStr, ConstStr, ConstStr);
+void processCsvFile(const char *, const char *, const char *);
 
 #endif

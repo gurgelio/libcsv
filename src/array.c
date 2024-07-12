@@ -5,11 +5,14 @@
 
 Array arrayNew(size_t itemSize)
 {
-  return (Array){
-      .items = calloc(1, itemSize),
+  Array array = (Array){
+      .items = calloc(4, itemSize),
       .size = 0,
-      .capacity = 1,
+      .capacity = 4,
       .itemSize = itemSize};
+  if (array.items == NULL)
+    fprintf(stderr, "failed to alloc\n");
+  return array;
 }
 
 void *arrayAt(Array *array, size_t index)
@@ -22,15 +25,18 @@ void *arrayAt(Array *array, size_t index)
   return array->items + array->itemSize * index;
 }
 
-Str arrayToString(Array *array)
+char *arrayToString(Array *array)
 {
-  Str str = calloc(1, sizeof(char)), item;
+  char *str = calloc(100, sizeof(char)), *item;
+  if (str == NULL)
+    fprintf(stderr, "failed to alloc\n");
   str[0] = '\0';
 
   for (size_t index = 0; index < array->size; index++)
   {
     item = arrayAt(array, index);
-    str = realloc(str, (strlen(str) + strlen(item) + 1) * sizeof(char));
+    if (str == NULL)
+      fprintf(stderr, "failed to alloc\n");
     strcat(str, item);
     if (index < array->size - 1)
       strcat(str, ",");
@@ -45,6 +51,16 @@ void arrayAppend(Array *array, void *item)
   {
     array->capacity *= 2;
     array->items = realloc(array->items, array->itemSize * array->capacity);
+    if (array->items == NULL)
+      fprintf(stderr, "failed to alloc\n");
   }
-  memcpy(&array->items + array->itemSize * array->size++, item, array->itemSize);
+  array->size += 1;
+  memcpy(arrayAt(array, array->size - 1), item, array->itemSize);
+}
+
+void arrayFree(Array *array)
+{
+  free(array->items);
+  array->items = NULL;
+  array->size = array->capacity = 0;
 }

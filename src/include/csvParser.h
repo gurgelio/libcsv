@@ -6,11 +6,12 @@
 
 typedef struct
 {
-  Token *tokens, *currentToken;
-  unsigned int numberOfTokens, currentIndex;
+  Token *currentToken;
+  Array tokens;
+  unsigned int currentIndex;
 } CsvParser;
 
-CsvParser csvParserNew(Token *tokens, unsigned int numberOfTokens);
+CsvParser csvParserNew(Array tokens);
 
 Csv parseCsv(CsvParser *parser);
 

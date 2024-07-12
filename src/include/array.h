@@ -1,6 +1,5 @@
 #ifndef ROW_H
 #define ROW_H
-#include "str.h"
 #include <stddef.h>
 
 typedef struct
@@ -13,8 +12,10 @@ Array arrayNew(size_t itemSize);
 
 void *arrayAt(Array *array, size_t index);
 
-Str arrayToString(Array *array);
+char *arrayToString(Array *array);
 
 void arrayAppend(Array *array, void *item);
+
+void arrayFree(Array *array);
 
 #endif

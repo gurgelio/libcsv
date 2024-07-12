@@ -3,28 +3,24 @@
 #include "include/io.h"
 #include <stdio.h>
 
-void processCsv(ConstStr csv, ConstStr selectedRows, ConstStr rowFilterDefinitions)
+void processCsv(const char *csv, const char *selectedRows, const char *rowFilterDefinitions)
 {
-  fprintf(stderr, "processCsv('%s', '%s', '%s')\n", csv, selectedRows, rowFilterDefinitions);
   Lexer lexer = lexerNew(csv);
-  unsigned int numberOfTokens;
-  Token *tokens = lexerGetTokens(&lexer, &numberOfTokens);
-  CsvParser parser = csvParserNew(tokens, numberOfTokens);
+  Array tokens = lexerGetTokens(&lexer);
+  CsvParser parser = csvParserNew(tokens);
   Csv parsedCsv = parseCsv(&parser);
-  fprintf(stderr, "headers: %s\n", arrayToString(&parsedCsv.headers));
-  fprintf(stderr, "%s\n", csvToString(&parsedCsv));
-  printf("%s", csvToString(&parsedCsv));
+  printf("%s\n", csvToString(&parsedCsv));
 }
 
-void processCsvFile(ConstStr csvFilePath, ConstStr selectedRows, ConstStr rowFilterDefinitions)
+void processCsvFile(const char *csvFilePath, const char *selectedRows, const char *rowFilterDefinitions)
 {
-  Str csv = getFileContents(csvFilePath);
+  char *csv = getFileContents(csvFilePath);
   return processCsv(csv, selectedRows, rowFilterDefinitions);
 }
 
 int main()
 {
-  Str file = getFileContents("data.csv");
+  char *file = getFileContents("data.csv");
   processCsv(file, "", "");
 
   return 0;

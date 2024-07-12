@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include "include/io.h"
 
-Str getFileContents(ConstStr filepath)
+char *getFileContents(const char *filepath)
 {
-  Str buffer = 0;
+  char *buffer = 0;
   long length;
 
   FILE *f = fopen(filepath, "rb");
@@ -16,6 +16,8 @@ Str getFileContents(ConstStr filepath)
     fseek(f, 0, SEEK_SET);
 
     buffer = calloc(length, length);
+    if (buffer == NULL)
+      fprintf(stderr, "failed to alloc\n");
 
     if (buffer)
       fread(buffer, 1, length, f);
