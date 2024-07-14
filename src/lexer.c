@@ -33,14 +33,33 @@ Token lexerNextToken(Lexer *lexer)
 {
   switch (lexer->currentChar)
   {
+  case '!':
+    advance(lexer);
+    if (lexer->currentChar != '=')
+    {
+      fprintf(stderr, "Illegal char! expected '=' but got %c", lexer->currentChar);
+      exit(1);
+    }
+    advance(lexer);
+    return tokenNew(TOKEN_OPERATOR, "!=");
   case '=':
     advance(lexer);
     return tokenNew(TOKEN_OPERATOR, "=");
   case '<':
     advance(lexer);
+    if (lexer->currentChar == '=')
+    {
+      advance(lexer);
+      return tokenNew(TOKEN_OPERATOR, "<=");
+    }
     return tokenNew(TOKEN_OPERATOR, "<");
   case '>':
     advance(lexer);
+    if (lexer->currentChar == '=')
+    {
+      advance(lexer);
+      return tokenNew(TOKEN_OPERATOR, ">=");
+    }
     return tokenNew(TOKEN_OPERATOR, ">");
   case ',':
     advance(lexer);
