@@ -1,27 +1,30 @@
 #include "include/libcsv.h"
-#include "include/csvParser.h"
+#include "include/parser.h"
+#include "include/filterSelections.h"
 #include "include/io.h"
 #include <stdio.h>
 
 void processCsv(const char *csv, const char *selectedRows, const char *rowFilterDefinitions)
 {
-  Lexer lexer = lexerNew(csv);
-  Array tokens = lexerGetTokens(&lexer);
-  CsvParser parser = csvParserNew(tokens);
-  Csv parsedCsv = parseCsv(&parser);
+  Csv parsedCsv = parseCsv(csv);
+
+  Array selections = parseSelections(selectedRows);
+
+  printf("%s\n", csvToString(&parsedCsv));
+  filterSelections(&parsedCsv, &selections);
   printf("%s\n", csvToString(&parsedCsv));
 }
 
 void processCsvFile(const char *csvFilePath, const char *selectedRows, const char *rowFilterDefinitions)
 {
-  char *csv = getFileContents(csvFilePath);
-  return processCsv(csv, selectedRows, rowFilterDefinitions);
+  return processCsv(getFileContents(csvFilePath), selectedRows, rowFilterDefinitions);
 }
 
 int main()
 {
   char *file = getFileContents("data.csv");
-  processCsv(file, "", "");
+
+  processCsv(file, "col1,col3,col2", "");
 
   return 0;
 }

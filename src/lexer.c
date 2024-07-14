@@ -3,6 +3,12 @@
 #include <stdio.h>
 #include "include/lexer.h"
 
+Array lex(const char *content)
+{
+  Lexer lexer = lexerNew(content);
+  return lexerGetTokens(&lexer);
+}
+
 Lexer lexerNew(const char *content)
 {
   return (Lexer){

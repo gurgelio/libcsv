@@ -8,12 +8,14 @@ typedef struct
 {
   Token *currentToken;
   Array tokens;
-  unsigned int currentIndex;
+  int currentIndex;
 } CsvParser;
 
 CsvParser csvParserNew(Array tokens);
 
-Csv parseCsv(CsvParser *parser);
+Csv parseCsv(const char *content);
+
+Array parseSelections(const char *selectedRows);
 
 Array parseRow(CsvParser *parser);
 

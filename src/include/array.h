@@ -5,16 +5,20 @@
 typedef struct
 {
   void *items;
-  size_t size, capacity, itemSize;
+  int size, capacity, itemSize;
 } Array;
 
-Array arrayNew(size_t itemSize);
+int arrayFindString(Array *array, char *str);
 
-void *arrayAt(Array *array, size_t index);
+Array arrayNew(int itemSize);
+
+void *arrayAt(Array *array, int index);
 
 char *arrayToString(Array *array);
 
 void arrayAppend(Array *array, void *item);
+
+void arrayRemove(Array *array, int index);
 
 void arrayFree(Array *array);
 

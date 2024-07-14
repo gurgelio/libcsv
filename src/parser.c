@@ -1,4 +1,5 @@
-#include "include/csvParser.h"
+#include "include/parser.h"
+#include "include/lexer.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,25 +9,26 @@ CsvParser csvParserNew(Array tokens)
   return (CsvParser){
       .tokens = tokens,
       .currentIndex = 0,
-      .currentToken = arrayAt(&tokens, 0)};
+      .currentToken = tokens.size > 0 ? arrayAt(&tokens, 0) : NULL};
 }
 
-Csv parseCsv(CsvParser *parser)
+Csv parseCsv(const char *content)
 {
+  CsvParser parser = csvParserNew(lex(content));
   Csv csv = csvNew();
 
-  csv.headers = parseRow(parser);
+  csv.headers = parseRow(&parser);
 
   Array row;
-  while (parser->currentToken != NULL && eatIf(parser, TOKEN_NEWLINE))
+  while (parser.currentToken != NULL && eatIf(&parser, TOKEN_NEWLINE))
   {
-    row = parseRow(parser);
+    row = parseRow(&parser);
 
     if (row.size == 0)
       continue;
     if (row.size != csv.headers.size)
     {
-      fprintf(stderr, "Inconsistent columns! Expected %ld columns, but got %ld\n", csv.headers.size, row.size);
+      fprintf(stderr, "Inconsistent columns! Expected %d columns, but got %d\n", csv.headers.size, row.size);
       exit(1);
     }
 
@@ -36,12 +38,18 @@ Csv parseCsv(CsvParser *parser)
   return csv;
 }
 
+Array parseSelections(const char *selectedRows)
+{
+  CsvParser parser = csvParserNew(lex(selectedRows));
+
+  return parseRow(&parser);
+}
+
 Array parseRow(CsvParser *parser)
 {
   Array row = arrayNew(sizeof(char *));
   while (parser->currentToken != NULL && parser->currentToken->type != TOKEN_NEWLINE)
   {
-    // TODO: talvez adicionar casos para cuidar de caracteres especiais como header
     arrayAppend(&row, parser->currentToken->value);
     eat(parser, TOKEN_VALUE);
     if (!eatIf(parser, TOKEN_COMMA))
@@ -64,6 +72,8 @@ void eat(CsvParser *parser, TokenType type)
 
 bool eatIf(CsvParser *parser, TokenType type)
 {
+  if (parser->currentToken == NULL)
+    return false;
   if (parser->currentToken->type != type)
     return false;
 

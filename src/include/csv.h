@@ -12,11 +12,13 @@ Csv csvNew();
 
 char *csvToString(Csv *csv);
 
-Array *csvGetRow(Csv *csv, size_t index);
+Array *csvGetRow(Csv *csv, int index);
 
-char *csvGetHeader(Csv *csv, size_t index);
+char *csvGetHeader(Csv *csv, int index);
 
-char *csvGetItem(Csv *csv, size_t row, size_t col);
+char *csvGetItem(Csv *csv, int row, int col);
+
+void csvRemoveColumn(Csv *csv, int index);
 
 void csvAppendRow(Csv *csv, Array row);
 

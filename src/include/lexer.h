@@ -12,6 +12,8 @@ typedef struct
   unsigned int currentIndex;
 } Lexer;
 
+Array lex(const char *content);
+
 Lexer lexerNew(const char *content);
 
 Array lexerGetTokens(Lexer *lexer);

@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-Array arrayNew(size_t itemSize)
+Array arrayNew(int itemSize)
 {
   Array array = (Array){
       .items = calloc(4, itemSize),
@@ -15,11 +15,23 @@ Array arrayNew(size_t itemSize)
   return array;
 }
 
-void *arrayAt(Array *array, size_t index)
+int arrayFindString(Array *array, char *str)
+{
+  for (int index = 0; index < array->size; index++)
+  {
+    if (strcmp(arrayAt(array, index), str) == 0)
+    {
+      return index;
+    }
+  }
+  return -1;
+}
+
+void *arrayAt(Array *array, int index)
 {
   if (index >= array->size)
   {
-    fprintf(stderr, "Index out of bounds: tried to access %ld of %s\n", index, arrayToString(array));
+    fprintf(stderr, "Index out of bounds: tried to access %d of [%s]\n", index, arrayToString(array));
     exit(1);
   }
   return array->items + array->itemSize * index;
@@ -32,7 +44,7 @@ char *arrayToString(Array *array)
     fprintf(stderr, "failed to alloc\n");
   str[0] = '\0';
 
-  for (size_t index = 0; index < array->size; index++)
+  for (int index = 0; index < array->size; index++)
   {
     item = arrayAt(array, index);
     if (str == NULL)
@@ -56,6 +68,12 @@ void arrayAppend(Array *array, void *item)
   }
   array->size += 1;
   memcpy(arrayAt(array, array->size - 1), item, array->itemSize);
+}
+
+void arrayRemove(Array *array, int index)
+{
+  memcpy(arrayAt(array, index), array->items + array->itemSize * (index + 1), array->itemSize * (array->size - index));
+  array->size -= 1;
 }
 
 void arrayFree(Array *array)
