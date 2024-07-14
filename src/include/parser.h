@@ -9,18 +9,20 @@ typedef struct
   Token *currentToken;
   Array tokens;
   int currentIndex;
-} CsvParser;
+} Parser;
 
-CsvParser csvParserNew(Array tokens);
+Parser parserNew(Array tokens);
 
 Csv parseCsv(const char *content);
 
 Array parseSelections(const char *selectedRows);
 
-Array parseRow(CsvParser *parser);
+Array parseConditions(const char *rowFilterDefinitions);
 
-void eat(CsvParser *parser, TokenType type);
+Array parseRow(Parser *parser);
 
-bool eatIf(CsvParser *parser, TokenType type);
+Token *eat(Parser *parser, TokenType type);
+
+bool eatIf(Parser *parser, TokenType type);
 
 #endif

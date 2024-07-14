@@ -35,13 +35,13 @@ Token lexerNextToken(Lexer *lexer)
   {
   case '=':
     advance(lexer);
-    return tokenNew(TOKEN_EQUALS, "=");
+    return tokenNew(TOKEN_OPERATOR, "=");
   case '<':
     advance(lexer);
-    return tokenNew(TOKEN_LESS_THAN, "<");
+    return tokenNew(TOKEN_OPERATOR, "<");
   case '>':
     advance(lexer);
-    return tokenNew(TOKEN_GREATER_THAN, ">");
+    return tokenNew(TOKEN_OPERATOR, ">");
   case ',':
     advance(lexer);
     return tokenNew(TOKEN_COMMA, ",");
@@ -59,16 +59,12 @@ Token lexerNextToken(Lexer *lexer)
 Token collectValue(Lexer *lexer)
 {
   char *value = calloc(1, sizeof(char));
-  if (value == NULL)
-    fprintf(stderr, "failed to alloc\n");
   value[0] = '\0';
 
   while (!isSeparator(lexer->currentChar))
   {
     char *s = currentCharAsString(lexer);
     value = realloc(value, (strlen(value) + strlen(s)) * sizeof(char));
-    if (value == NULL)
-      fprintf(stderr, "failed to alloc\n");
     strcat(value, s);
     advance(lexer);
   }

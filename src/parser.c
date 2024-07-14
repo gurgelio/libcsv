@@ -1,12 +1,13 @@
 #include "include/parser.h"
 #include "include/lexer.h"
+#include "include/condition.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-CsvParser csvParserNew(Array tokens)
+Parser parserNew(Array tokens)
 {
-  return (CsvParser){
+  return (Parser){
       .tokens = tokens,
       .currentIndex = 0,
       .currentToken = tokens.size > 0 ? arrayAt(&tokens, 0) : NULL};
@@ -14,7 +15,7 @@ CsvParser csvParserNew(Array tokens)
 
 Csv parseCsv(const char *content)
 {
-  CsvParser parser = csvParserNew(lex(content));
+  Parser parser = parserNew(lex(content));
   Csv csv = csvNew();
 
   csv.headers = parseRow(&parser);
@@ -40,37 +41,55 @@ Csv parseCsv(const char *content)
 
 Array parseSelections(const char *selectedRows)
 {
-  CsvParser parser = csvParserNew(lex(selectedRows));
+  Parser parser = parserNew(lex(selectedRows));
 
   return parseRow(&parser);
 }
 
-Array parseRow(CsvParser *parser)
+Array parseConditions(const char *rowFilterDefinitions)
+{
+  Parser parser = parserNew(lex(rowFilterDefinitions));
+  Array conditions = arrayNew(sizeof(Condition));
+
+  while (parser.currentToken != NULL)
+  {
+    char *header = eat(&parser, TOKEN_VALUE)->value, *operator= eat(&parser, TOKEN_OPERATOR)->value, *value = eat(&parser, TOKEN_VALUE)->value;
+    Condition condition = conditionNew(header, operator, value);
+    arrayAppend(&conditions, &condition);
+
+    if (!eatIf(&parser, TOKEN_NEWLINE))
+    {
+      break;
+    }
+  }
+  return conditions;
+}
+
+Array parseRow(Parser *parser)
 {
   Array row = arrayNew(sizeof(char *));
   while (parser->currentToken != NULL && parser->currentToken->type != TOKEN_NEWLINE)
   {
-    arrayAppend(&row, parser->currentToken->value);
-    eat(parser, TOKEN_VALUE);
+    arrayAppend(&row, eat(parser, TOKEN_VALUE)->value);
     if (!eatIf(parser, TOKEN_COMMA))
-    {
       break;
-    }
   }
 
   return row;
 }
 
-void eat(CsvParser *parser, TokenType type)
+Token *eat(Parser *parser, TokenType type)
 {
+  Token *token = parser->currentToken;
   if (!eatIf(parser, type))
   {
     fprintf(stderr, "Unexpected Token: expected %s, got %s\n", tokenTypeToString(type), tokenToString(parser->currentToken));
     exit(1);
   }
+  return token;
 }
 
-bool eatIf(CsvParser *parser, TokenType type)
+bool eatIf(Parser *parser, TokenType type)
 {
   if (parser->currentToken == NULL)
     return false;

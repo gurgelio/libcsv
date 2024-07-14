@@ -5,4 +5,6 @@
 
 void filterSelections(Csv *csv, Array *selections);
 
+void validateSelections(Csv *csv, Array *selections);
+
 #endif

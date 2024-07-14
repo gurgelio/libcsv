@@ -10,8 +10,6 @@ Array arrayNew(int itemSize)
       .size = 0,
       .capacity = 4,
       .itemSize = itemSize};
-  if (array.items == NULL)
-    fprintf(stderr, "failed to alloc\n");
   return array;
 }
 
@@ -40,15 +38,11 @@ void *arrayAt(Array *array, int index)
 char *arrayToString(Array *array)
 {
   char *str = calloc(100, sizeof(char)), *item;
-  if (str == NULL)
-    fprintf(stderr, "failed to alloc\n");
   str[0] = '\0';
 
   for (int index = 0; index < array->size; index++)
   {
     item = arrayAt(array, index);
-    if (str == NULL)
-      fprintf(stderr, "failed to alloc\n");
     strcat(str, item);
     if (index < array->size - 1)
       strcat(str, ",");
@@ -63,8 +57,6 @@ void arrayAppend(Array *array, void *item)
   {
     array->capacity *= 2;
     array->items = realloc(array->items, array->itemSize * array->capacity);
-    if (array->items == NULL)
-      fprintf(stderr, "failed to alloc\n");
   }
   array->size += 1;
   memcpy(arrayAt(array, array->size - 1), item, array->itemSize);

@@ -1,17 +1,19 @@
 #include "include/libcsv.h"
 #include "include/parser.h"
 #include "include/filterSelections.h"
+#include "include/filterConditions.h"
 #include "include/io.h"
 #include <stdio.h>
 
 void processCsv(const char *csv, const char *selectedRows, const char *rowFilterDefinitions)
 {
   Csv parsedCsv = parseCsv(csv);
-
+  Array conditions = parseConditions(rowFilterDefinitions);
   Array selections = parseSelections(selectedRows);
 
-  printf("%s\n", csvToString(&parsedCsv));
+  filterConditions(&parsedCsv, &conditions);
   filterSelections(&parsedCsv, &selections);
+
   printf("%s\n", csvToString(&parsedCsv));
 }
 
@@ -24,7 +26,7 @@ int main()
 {
   char *file = getFileContents("data.csv");
 
-  processCsv(file, "col1,col3,col2", "");
+  processCsv(file, "col1,col3,col2", "col1=l1c1");
 
   return 0;
 }

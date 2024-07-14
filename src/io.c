@@ -16,8 +16,6 @@ char *getFileContents(const char *filepath)
     fseek(f, 0, SEEK_SET);
 
     buffer = calloc(length, length);
-    if (buffer == NULL)
-      fprintf(stderr, "failed to alloc\n");
 
     if (buffer)
       fread(buffer, 1, length, f);

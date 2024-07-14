@@ -21,12 +21,15 @@ char *csvToString(Csv *csv)
     rowStr = arrayToString(csvGetRow(csv, index));
 
     acc = realloc(acc, (strlen(acc) + strlen(rowStr) + 1) * sizeof(char));
-    if (acc == NULL)
-      fprintf(stderr, "failed to alloc\n");
     strcat(acc, "\n");
     strcat(acc, rowStr);
   }
   return acc;
+}
+
+void csvRemoveRow(Csv *csv, int index)
+{
+  arrayRemove(&csv->rows, index);
 }
 
 Array *csvGetRow(Csv *csv, int index)

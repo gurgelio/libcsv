@@ -13,8 +13,6 @@ Token tokenNew(TokenType type, char *value)
 char *tokenToString(Token *token)
 {
   char *s = malloc(100 * sizeof(char));
-  if (s == NULL)
-    fprintf(stderr, "failed to alloc\n");
 
   sprintf(s, "Token(%s, '%s')", tokenTypeToString(token->type), token->value);
   return s;
@@ -26,12 +24,8 @@ char *tokenTypeToString(TokenType type)
   {
   case TOKEN_COMMA:
     return ",";
-  case TOKEN_EQUALS:
-    return "=";
-  case TOKEN_GREATER_THAN:
-    return ">";
-  case TOKEN_LESS_THAN:
-    return "<";
+  case TOKEN_OPERATOR:
+    return "OPERATOR";
   case TOKEN_NEWLINE:
     return "\\n";
   // case TOKEN_NOT_EQUALS:
@@ -40,8 +34,6 @@ char *tokenTypeToString(TokenType type)
     return "VALUE";
   default:
     char *s = malloc(100 * sizeof(char));
-    if (s == NULL)
-      fprintf(stderr, "failed to alloc\n");
     sprintf(s, "%d", type);
     return s;
   }
