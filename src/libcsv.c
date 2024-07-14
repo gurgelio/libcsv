@@ -26,7 +26,7 @@ int main()
 {
   char *file = getFileContents("data.csv");
 
-  processCsv(file, "col1,col3,col2", "col1=l1c1");
+  processCsv(file, "col1,col3,col2", "col3<l1c1");
 
   return 0;
 }
