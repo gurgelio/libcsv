@@ -37,7 +37,7 @@ Csv parseCsv(const char *content)
       exit(1);
     }
 
-    csvAppendRow(&csv, row);
+    arrayAppend(&csv.rows, &row);
   }
 
   return csv;

@@ -27,21 +27,6 @@ char *csvToString(Csv *csv)
   return acc;
 }
 
-void csvRemoveRow(Csv *csv, int index)
-{
-  arrayRemove(&csv->rows, index);
-}
-
-char *csvGetHeader(Csv *csv, int index)
-{
-  return arrayAt(&csv->headers, index);
-}
-
-char *csvGetItem(Csv *csv, int row, int col)
-{
-  return arrayAt(arrayAt(&csv->rows, row), col);
-}
-
 void csvRemoveColumn(Csv *csv, int index)
 {
   arrayRemove(&csv->headers, index);
@@ -49,9 +34,4 @@ void csvRemoveColumn(Csv *csv, int index)
   {
     arrayRemove(arrayAt(&csv->rows, row), index);
   }
-}
-
-void csvAppendRow(Csv *csv, Array row)
-{
-  arrayAppend(&csv->rows, &row);
 }

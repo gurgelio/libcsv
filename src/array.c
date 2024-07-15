@@ -27,7 +27,7 @@ int arrayFindString(Array *array, char *str)
 
 void *arrayAt(Array *array, int index)
 {
-  if (index >= array->size)
+  if (index < 0 || index >= array->size)
   {
     fprintf(stderr, "Index out of bounds: tried to access %d of [%s]\n", index, arrayToString(array));
     exit(1);

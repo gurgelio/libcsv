@@ -24,6 +24,6 @@ char *getFileContents(const char *filepath)
     return buffer;
   }
 
-  printf("Error reading file %s\n", filepath);
-  exit(2);
+  fprintf(stderr, "Error reading file %s\n", filepath);
+  exit(1);
 }
