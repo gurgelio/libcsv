@@ -67,10 +67,3 @@ void arrayRemove(Array *array, int index)
   memcpy(arrayAt(array, index), array->items + array->itemSize * (index + 1), array->itemSize * (array->size - index));
   array->size -= 1;
 }
-
-void arrayFree(Array *array)
-{
-  free(array->items);
-  array->items = NULL;
-  array->size = array->capacity = 0;
-}

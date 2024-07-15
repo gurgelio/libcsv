@@ -68,13 +68,4 @@ void arrayAppend(Array *array, void *item);
  */
 void arrayRemove(Array *array, int index);
 
-/**
- * Frees the entire array
- *
- * @param array The array to be freed
- *
- * @returns void
- */
-void arrayFree(Array *array);
-
 #endif
