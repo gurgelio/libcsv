@@ -21,12 +21,3 @@ void processCsvFile(const char *csvFilePath, const char *selectedRows, const cha
 {
   return processCsv(getFileContents(csvFilePath), selectedRows, rowFilterDefinitions);
 }
-
-int main()
-{
-  char *file = getFileContents("data.csv");
-
-  processCsv(file, "", "col1!=l1c1");
-
-  return 0;
-}

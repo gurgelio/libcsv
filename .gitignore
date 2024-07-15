@@ -1,3 +1,5 @@
 *.so
 *.o
 *.out
+test_runner
+*.log

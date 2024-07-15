@@ -1,7 +1,10 @@
 shared_object = libcsv.so
-executable = libcsv.out
 sources = $(wildcard src/*.c)
 objects = $(sources:.c=.o)
+
+tests = $(wildcard test/t_*.c)
+test_objects = $(tests:.c=.o)
+
 compiler = gcc
 flags = -g -fPIC -Wall -Wextra
 
@@ -11,8 +14,12 @@ $(shared_object): $(objects)
 %.o: %.c include/%.h
 	$(compiler) -c $(flags) $< -o $@
 
-test: $(objects)
-	$(compiler) $(flags) $^ -o $(executable) && ./$(executable)
+test_runner: $(objects) $(test_objects)
+	$(compiler) $(flags) $^ -o $@
+
+runtest: test_runner
+	@./test_runner 2>> test.log
 
 clean:
-	rm -f $(executable) $(shared_object) $(objects)
+	-rm -f $(shared_object) $(objects) test_runner $(test_objects)
+	-cd test; make -B clean
