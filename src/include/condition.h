@@ -23,6 +23,4 @@ typedef struct
 Condition conditionNew(char *header, char *operator, char * value);
 
 bool testCondition(Condition *condition, char *value);
-
-Operator toOperator(char *operator);
 #endif

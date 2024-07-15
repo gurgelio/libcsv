@@ -1,35 +1,42 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
+#include "include/token.h"
 #include "include/lexer.h"
+
+typedef struct
+{
+  char currentChar;
+  const char *content;
+  unsigned int currentIndex;
+} Lexer;
+
+static inline Token lexerNextToken(Lexer *lexer);
+static inline Token collectValue(Lexer *lexer);
+static inline void advance(Lexer *lexer);
+static inline char *currentCharAsString(Lexer *lexer);
+static inline bool isSeparator(char c);
+static inline bool hasReachedEof(Lexer *lexer);
 
 Array lex(const char *content)
 {
-  Lexer lexer = lexerNew(content);
-  return lexerGetTokens(&lexer);
-}
-
-Lexer lexerNew(const char *content)
-{
-  return (Lexer){
+  Lexer lexer = (Lexer){
       .content = content,
       .currentChar = content[0],
       .currentIndex = 0};
-}
 
-Array lexerGetTokens(Lexer *lexer)
-{
   Array tokens = arrayNew(sizeof(Token));
-  Token token = lexerNextToken(lexer);
+  Token token = lexerNextToken(&lexer);
   while (token.type != TOKEN_EOF)
   {
     arrayAppend(&tokens, &token);
-    token = lexerNextToken(lexer);
+    token = lexerNextToken(&lexer);
   }
   return tokens;
 }
 
-Token lexerNextToken(Lexer *lexer)
+static inline Token lexerNextToken(Lexer *lexer)
 {
   switch (lexer->currentChar)
   {
@@ -75,7 +82,7 @@ Token lexerNextToken(Lexer *lexer)
   }
 }
 
-Token collectValue(Lexer *lexer)
+static inline Token collectValue(Lexer *lexer)
 {
   char *value = calloc(1, sizeof(char));
   value[0] = '\0';
@@ -91,7 +98,7 @@ Token collectValue(Lexer *lexer)
   return tokenNew(TOKEN_VALUE, value);
 }
 
-void advance(Lexer *lexer)
+static inline void advance(Lexer *lexer)
 {
   lexer->currentIndex += 1;
   if (hasReachedEof(lexer))
@@ -103,7 +110,7 @@ void advance(Lexer *lexer)
   lexer->currentChar = lexer->content[lexer->currentIndex];
 }
 
-char *currentCharAsString(Lexer *lexer)
+static inline char *currentCharAsString(Lexer *lexer)
 {
   char *str = calloc(2, sizeof(char));
   if (str == NULL)
@@ -114,12 +121,12 @@ char *currentCharAsString(Lexer *lexer)
   return str;
 }
 
-bool isSeparator(char c)
+static inline bool isSeparator(char c)
 {
   return c == ',' || c == '<' || c == '>' || c == '=' || c == '!' || c == '\n' || c == '\0';
 }
 
-bool hasReachedEof(Lexer *lexer)
+static inline bool hasReachedEof(Lexer *lexer)
 {
   return lexer->currentIndex >= strlen(lexer->content);
 }

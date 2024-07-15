@@ -5,13 +5,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-Parser parserNew(Array tokens)
+typedef struct
 {
-  return (Parser){
-      .tokens = tokens,
-      .currentIndex = 0,
-      .currentToken = tokens.size > 0 ? arrayAt(&tokens, 0) : NULL};
-}
+  Token *currentToken;
+  Array tokens;
+  int currentIndex;
+} Parser;
+
+static inline Array parseRow(Parser *parser);
+static inline Token *eat(Parser *parser, TokenType type);
+static inline bool eatIf(Parser *parser, TokenType type);
+static inline Parser parserNew(Array tokens);
 
 Csv parseCsv(const char *content)
 {
@@ -65,7 +69,7 @@ Array parseConditions(const char *rowFilterDefinitions)
   return conditions;
 }
 
-Array parseRow(Parser *parser)
+static inline Array parseRow(Parser *parser)
 {
   Array row = arrayNew(sizeof(char *));
   while (parser->currentToken != NULL && parser->currentToken->type != TOKEN_NEWLINE)
@@ -78,7 +82,7 @@ Array parseRow(Parser *parser)
   return row;
 }
 
-Token *eat(Parser *parser, TokenType type)
+static inline Token *eat(Parser *parser, TokenType type)
 {
   Token *token = parser->currentToken;
   if (!eatIf(parser, type))
@@ -89,7 +93,7 @@ Token *eat(Parser *parser, TokenType type)
   return token;
 }
 
-bool eatIf(Parser *parser, TokenType type)
+static inline bool eatIf(Parser *parser, TokenType type)
 {
   if (parser->currentToken == NULL)
     return false;
@@ -106,4 +110,12 @@ bool eatIf(Parser *parser, TokenType type)
     parser->currentToken = NULL;
   }
   return true;
+}
+
+static inline Parser parserNew(Array tokens)
+{
+  return (Parser){
+      .tokens = tokens,
+      .currentIndex = 0,
+      .currentToken = tokens.size > 0 ? arrayAt(&tokens, 0) : NULL};
 }

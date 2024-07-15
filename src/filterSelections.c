@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+static inline void validateSelections(Csv *csv, Array *selections);
+
 void filterSelections(Csv *csv, Array *selections)
 {
   if (selections->size == 0)
@@ -17,7 +19,7 @@ void filterSelections(Csv *csv, Array *selections)
   }
 }
 
-void validateSelections(Csv *csv, Array *selections)
+static inline void validateSelections(Csv *csv, Array *selections)
 {
   for (int i = 0; i < selections->size; i++)
   {

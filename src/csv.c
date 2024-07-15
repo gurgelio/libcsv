@@ -18,7 +18,7 @@ char *csvToString(Csv *csv)
 
   for (int index = 0; index < csv->rows.size; index++)
   {
-    rowStr = arrayToString(csvGetRow(csv, index));
+    rowStr = arrayToString(arrayAt(&csv->rows, index));
 
     acc = realloc(acc, (strlen(acc) + strlen(rowStr) + 1) * sizeof(char));
     strcat(acc, "\n");
@@ -32,11 +32,6 @@ void csvRemoveRow(Csv *csv, int index)
   arrayRemove(&csv->rows, index);
 }
 
-Array *csvGetRow(Csv *csv, int index)
-{
-  return arrayAt(&csv->rows, index);
-}
-
 char *csvGetHeader(Csv *csv, int index)
 {
   return arrayAt(&csv->headers, index);
@@ -44,7 +39,7 @@ char *csvGetHeader(Csv *csv, int index)
 
 char *csvGetItem(Csv *csv, int row, int col)
 {
-  return arrayAt(csvGetRow(csv, row), col);
+  return arrayAt(arrayAt(&csv->rows, row), col);
 }
 
 void csvRemoveColumn(Csv *csv, int index)

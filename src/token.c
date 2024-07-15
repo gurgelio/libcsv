@@ -28,8 +28,6 @@ char *tokenTypeToString(TokenType type)
     return "OPERATOR";
   case TOKEN_NEWLINE:
     return "\\n";
-  // case TOKEN_NOT_EQUALS:
-  //   return "!=";
   case TOKEN_VALUE:
     return "VALUE";
   default:

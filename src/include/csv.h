@@ -14,8 +14,6 @@ char *csvToString(Csv *csv);
 
 void csvRemoveRow(Csv *csv, int index);
 
-Array *csvGetRow(Csv *csv, int index);
-
 char *csvGetHeader(Csv *csv, int index);
 
 char *csvGetItem(Csv *csv, int row, int col);

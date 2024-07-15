@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+static inline Operator toOperator(char *operator);
+
 Condition conditionNew(char *header, char *operator, char * value)
 {
   Operator op = toOperator(operator);
@@ -40,7 +42,7 @@ bool testCondition(Condition *condition, char *value)
   }
 }
 
-Operator toOperator(char *operator)
+static inline Operator toOperator(char *operator)
 {
   if (strcmp(operator, "=") == 0)
     return OPERATOR_EQUALS;
