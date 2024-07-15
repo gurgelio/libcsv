@@ -20,6 +20,7 @@ char *tokenToString(Token *token)
 
 char *tokenTypeToString(TokenType type)
 {
+  char *s = NULL;
   switch (type)
   {
   case TOKEN_COMMA:
@@ -31,7 +32,7 @@ char *tokenTypeToString(TokenType type)
   case TOKEN_VALUE:
     return "VALUE";
   default:
-    char *s = malloc(100 * sizeof(char));
+    s = malloc(100 * sizeof(char));
     sprintf(s, "%d", type);
     return s;
   }
