@@ -10,7 +10,7 @@
  * @param selectedColumns The columns to be selected from the CSV data.
  * @param rowFilterDefinitions The filters to be applied to the CSV data.
  *
- * @return void
+ * @returns void
  */
 void processCsv(const char *, const char *, const char *);
 
@@ -21,7 +21,7 @@ void processCsv(const char *, const char *, const char *);
  * @param selectedColumns The columns to be selected from the CSV data.
  * @param rowFilterDefinitions The filters to be applied to the CSV data.
  *
- * @return void
+ * @returns void
  */
 void processCsvFile(const char *, const char *, const char *);
 

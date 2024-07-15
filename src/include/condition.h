@@ -20,7 +20,24 @@ typedef struct
   Operator operator;
 } Condition;
 
+/**
+ * Creates a new Condition struct
+ *
+ * @param header The string of the header
+ * @param operator The string of the operator
+ * @param value The value to compare with the rows
+ *
+ * @returns A dynamic condition to be tested against value of the csv
+ */
 Condition conditionNew(char *header, char *operator, char * value);
 
+/**
+ * Tests the condition against the given value
+ *
+ * @param condition The condition to apply
+ * @param value The value to compare
+ *
+ * @returns True if the value passes the condition, False otherwise
+ */
 bool testCondition(Condition *condition, char *value);
 #endif
